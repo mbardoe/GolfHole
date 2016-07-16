@@ -12,7 +12,7 @@ Equipment:
   - Hot Glue
   - Craft sticks for supports
   - hookup wire
-  - 
+
 
 The Photos folder shows photos of the final project. 
 
