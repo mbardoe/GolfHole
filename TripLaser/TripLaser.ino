@@ -1,18 +1,10 @@
 /* light beam trigger based on SWEEP by Scott Fitzgerald & Barragan and the adafruit photocell
-<<<<<<< HEAD
-    test
-
-		A laser pointer is used to create a tripwire across a box. When the beam is 
-		broken the servo is activated and a flag is raised. Then two rows of leds light up
-		in an alternating pattern. A delay of 2 seconds happens and then the whole thing resets. 
-		Added a siren sound with a piezo.
-=======
     test and siren sketch that Ben Small provided.
 		A laser pointer is used to create a tripwire across a box. When the beam is 
 		broken the servo is activated and a flag is raised. Then two rows of leds light up
 		in an alternating pattern. A delay of 2 seconds happens and then the whole thing resets. 
 		Added a siren through a piezo.
->>>>>>> origin/master
+
 
 		by Matthew K. Bardoe
 		July 15, 2016
@@ -26,21 +18,12 @@
 int blueLED = 3;  // the pin for one string of LEDs
 int yellowLED = 4; // the pin for the other string of LED's
 
-<<<<<<< HEAD
-// twelve servo objects can be created on most boards
-int laserPin = 2;
-int blueLED = 3;
-int yellowLED = 4;
-=======
->>>>>>> origin/master
+
 // Siren info
 int speakerpin = 8; // the pin to which the Piezo will be attached  (other Piezo wire is grounded)
 int lowpitch = 500;
 int highpitch = 3000;
 
-<<<<<<< HEAD
-int servoPosition = 90;
-=======
 //laser info
 int laserPin = 2; // the pin for the laser pointer
 int tripValue =950; // the reading of the beam for no laser.
@@ -48,20 +31,13 @@ int tripValue =950; // the reading of the beam for no laser.
 //Servo info
 Servo myservo;  // create servo object to control a servo
 int servoPosition = 90; // lower position for the flag. 
->>>>>>> origin/master
 int pos = 90;    // variable to store the servo position
 
 //Photocell info
 int photocellPin = A0;     // the cell and 10K pulldown are connected to a0
-<<<<<<< HEAD
-int photocellReading = 0;
-int photocellInit = 0;
-=======
 int photocellReading = 0;  // the current reading of the photocell. Generally with a laser the reading is close to 1000. 
 int photocellInit = 0; // This is used in the startup to make sure that the beam is aligned with the photocell
 
-
->>>>>>> origin/master
 void setup() {
   Serial.begin(9600);
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
@@ -117,13 +93,9 @@ void loop() {
 void lightLights() {
   Serial.println("Light Blue lights");
   digitalWrite(3, HIGH);
-<<<<<<< HEAD
-  
-    for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
-=======
+
   //Activate Siren
   for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
->>>>>>> origin/master
       tone(speakerpin, pitch, 3);  //plays a given tone for 2ms
 
     }
@@ -133,21 +105,11 @@ void lightLights() {
 
     }
   
-<<<<<<< HEAD
-  //delay(500);
-  Serial.println("Light Yellow lights");
-
-  digitalWrite(3, LOW);
-  digitalWrite(4, HIGH);
-  
-    for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
-=======
   //Serial.println("Light Yellow lights");
   digitalWrite(3, LOW);
   digitalWrite(4, HIGH);
   //activate siren
   for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
->>>>>>> origin/master
       tone(speakerpin, pitch, 3);  //plays a given tone for 2ms
 
     }
@@ -157,11 +119,6 @@ void lightLights() {
 
     }
   
-<<<<<<< HEAD
-
-  //delay(500);
-=======
->>>>>>> origin/master
   digitalWrite(4, LOW);
 
 }
