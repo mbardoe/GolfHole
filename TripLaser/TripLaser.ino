@@ -39,7 +39,7 @@ int photocellReading = 0;  // the current reading of the photocell. Generally wi
 int photocellInit = 0; // This is used in the startup to make sure that the beam is aligned with the photocell
 
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
   // Set the pins
   pinMode(2, OUTPUT);
@@ -55,7 +55,7 @@ void setup() {
     photocellInit = 0.1 * photocellReading + .9 * photocellInit;
     Serial.println(photocellReading);
   }
-  Serial.println("BEGIN");
+  //Serial.println("BEGIN");
   myservo.write(servoPosition);
 }
 
@@ -80,7 +80,7 @@ void loop() {
     delay(200);
   }
   else if (servoPosition != 90 ) {
-    Serial.println("Lower the flag");
+    //Serial.println("Lower the flag");
     for (pos = 172; pos >= 90; pos -= 1) { // goes from 180 degrees to 0 degrees
       myservo.write(pos);              // tell servo to go to position in variable 'pos'
       delay(15);                       // waits 15ms for the servo to reach the position
@@ -91,7 +91,7 @@ void loop() {
 }
 
 void lightLights() {
-  Serial.println("Light Blue lights");
+  //Serial.println("Light Blue lights");
   digitalWrite(3, HIGH);
 
   //Activate Siren
