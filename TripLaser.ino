@@ -1,8 +1,9 @@
 /* light beam trigger based on SWEEP by Scott Fitzgerald & Barragan and the adafruit photocell
-    test
+    test and siren sketch that Ben Small provided.
 		A laser pointer is used to create a tripwire across a box. When the beam is 
 		broken the servo is activated and a flag is raised. Then two rows of leds light up
 		in an alternating pattern. A delay of 2 seconds happens and then the whole thing resets. 
+		Added a siren through a piezo.
 
 		by Matthew K. Bardoe
 		July 15, 2016
@@ -12,18 +13,30 @@
 
 #include <Servo.h>
 
-Servo myservo;  // create servo object to control a servo
-
-
-int laserPin = 2; // the pin for the laser pointer
+// LED info
 int blueLED = 3;  // the pin for one string of LEDs
 int yellowLED = 4; // the pin for the other string of LED's
+
+// Siren info
+int speakerpin = 8; // the pin to which the Piezo will be attached  (other Piezo wire is grounded)
+int lowpitch = 500;
+int highpitch = 3000;
+
+//laser info
+int laserPin = 2; // the pin for the laser pointer
 int tripValue =950; // the reading of the beam for no laser.
+
+//Servo info
+Servo myservo;  // create servo object to control a servo
 int servoPosition = 90; // lower position for the flag. 
 int pos = 90;    // variable to store the servo position
+
+//Photocell info
 int photocellPin = A0;     // the cell and 10K pulldown are connected to a0
 int photocellReading = 0;  // the current reading of the photocell. Generally with a laser the reading is close to 1000. 
 int photocellInit = 0; // This is used in the startup to make sure that the beam is aligned with the photocell
+
+
 void setup() {
   Serial.begin(9600);  // begin serial
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
@@ -81,11 +94,31 @@ void loop() {
 void lightLights() { // little script to flash each strip.
   //Serial.println("Light Blue lights");
   digitalWrite(3, HIGH);
-  delay(500);
+  //Activate Siren
+  for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
+      tone(speakerpin, pitch, 3);  //plays a given tone for 2ms
+
+    }
+    for (int pitch = highpitch; pitch > lowpitch; pitch--) { // cycles the pitch down from higpitch to lowpitch
+      // play the tone for 20 ms on pin 8
+      tone(speakerpin, pitch, 3);
+
+    }
+  
   //Serial.println("Light Yellow lights");
   digitalWrite(3, LOW);
   digitalWrite(4, HIGH);
-  delay(500);
+  //activate siren
+  for (int pitch = lowpitch; pitch < highpitch; pitch++) { // cycles the pitch up from lowpitch to high pitch (Hz)
+      tone(speakerpin, pitch, 3);  //plays a given tone for 2ms
+
+    }
+    for (int pitch = highpitch; pitch > lowpitch; pitch--) { // cycles the pitch down from higpitch to lowpitch
+      // play the tone for 20 ms on pin 8
+      tone(speakerpin, pitch, 3);
+
+    }
+  
   digitalWrite(4, LOW);
 
 }
