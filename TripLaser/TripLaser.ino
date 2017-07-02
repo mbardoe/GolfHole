@@ -9,14 +9,29 @@
 		by Matthew K. Bardoe
 		July 15, 2016
 
+                Modifying by making the movement sensor be two piezos, and removing the laser.
+                by Matthew K. Bardoe
+                July 1, 2017
+
 
 */
 
 #include <Servo.h>
 
+//Sensor variables
+
+int rightSensorValue;
+int leftSensorValue;
+int sensorHigh=0;
+int sensorTrip;
+
 // LED info
 int blueLED = 3;  // the pin for one string of LEDs
 int yellowLED = 4; // the pin for the other string of LED's
+
+//Piezo sensor info
+int rightPiezo = A0;
+int leftPiezo = A1;
 
 
 // Siren info
@@ -25,8 +40,8 @@ int lowpitch = 500;
 int highpitch = 3000;
 
 //laser info
-int laserPin = 2; // the pin for the laser pointer
-int tripValue =950; // the reading of the beam for no laser.
+//int laserPin = 2; // the pin for the laser pointer
+//int tripValue =950; // the reading of the beam for no laser.
 
 //Servo info
 Servo myservo;  // create servo object to control a servo
@@ -34,39 +49,67 @@ int servoPosition = 90; // lower position for the flag.
 int pos = 90;    // variable to store the servo position
 
 //Photocell info
-int photocellPin = A0;     // the cell and 10K pulldown are connected to a0
-int photocellReading = 0;  // the current reading of the photocell. Generally with a laser the reading is close to 1000. 
-int photocellInit = 0; // This is used in the startup to make sure that the beam is aligned with the photocell
+//int photocellPin = A0;     // the cell and 10K pulldown are connected to a0
+//int photocellReading = 0;  // the current reading of the photocell. Generally with a laser the reading is close to 1000. 
+//int photocellInit = 0; // This is used in the startup to make sure that the beam is aligned with the photocell
 
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
   // Set the pins
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
+  //set normal level of the readings...
+  while (millis() < 5000) {
+    // record the maximum sensor value
+    rightSensorValue = analogRead(rightPiezo);
+    leftSensorValue = analogRead(leftPiezo);
+    
+    if (rightSensorValue > sensorHigh || leftSensorValue > sensorHigh) {
+      if (rightSensorValue > leftSensorValue){
+        sensorHigh = rightSensorValue;
+      }
+      else {
+        sensorHigh = leftSensorValue;
+      }
+ 
+    }
+
+  }
+  sensorTrip=(int) .3*sensorHigh;
+  if (sensorTrip>1024){
+    sensorTrip = 900;
+  }
+  
+
+  
   // test lights
   lightLights();
   // Test laser
-  digitalWrite(2, HIGH); //Turn on Laser
-  while (photocellInit < 900)
-  {
-    photocellReading = analogRead(photocellPin);
-    photocellInit = 0.1 * photocellReading + .9 * photocellInit;
-    Serial.println(photocellReading);
-  }
-  //Serial.println("BEGIN");
+  //digitalWrite(2, HIGH); //Turn on Laser
+  //while (photocellInit < 900)
+//  {
+//    photocellReading = analogRead(photocellPin);
+//    photocellInit = 0.1 * photocellReading + .9 * photocellInit;
+//    Serial.println(photocellReading);
+//  }
+  Serial.println("BEGIN");
   myservo.write(servoPosition);
+  //set normal 
 }
 
 void loop() {
-  photocellReading = analogRead(photocellPin);
-  if (photocellReading < 950) {
+  //photocellReading = analogRead(photocellPin);
+  rightSensorValue=analogRead(rightPiezo);
+  leftSensorValue=analogRead(leftPiezo);
+  
+  if (rightSensorValue > sensorTrip || leftSensorValue >sensorTrip ) {
     //Raise
-    digitalWrite(laserPin, LOW);
+    //digitalWrite(laserPin, LOW);
     Serial.println("Raise the flag");
     for (pos = 90; pos <= 172; pos += 10) { // goes from 0 degrees to 180 degrees
-      // in steps of 1 degree
+      // in steps of 10 degree
       myservo.write(pos);              // tell servo to go to position in variable 'pos'
       delay(15);                       // waits 15ms for the servo to reach the position
     }
@@ -76,8 +119,8 @@ void loop() {
     }
     servoPosition = 172;
     delay(2000);
-    digitalWrite(laserPin, HIGH);
-    delay(200);
+    //digitalWrite(laserPin, HIGH);
+    //delay(200);
   }
   else if (servoPosition != 90 ) {
     //Serial.println("Lower the flag");
